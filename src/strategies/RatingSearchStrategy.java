@@ -1,31 +1,29 @@
 package strategies;
 
-import models.GenreType;
 import models.Movie;
 import models.SearchCriteria;
 import models.SearchType;
-import utils.GenreUtils;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GenreSearchStrategy implements SearchStrategy {
+public class RatingSearchStrategy implements SearchStrategy {
 
     @Override
     public List<Movie> search(Collection<Movie> movies, SearchCriteria criteria) {
         if(!supports(criteria)) {
-            throw new IllegalArgumentException("Search criteria are not supported");
+            throw new IllegalArgumentException("Search criteria not supported");
         }
 
-        GenreType targetGenre = GenreUtils.parseGenreType(criteria.getValue());
+        float minRating = Float.parseFloat(criteria.getValue());
         return movies.stream()
-                .filter(m -> GenreUtils.isGenreMatch(m.getGenre(), targetGenre))
+                .filter(m -> m.getRating() >= minRating)
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean supports(SearchCriteria criteria) {
-        return !criteria.isMultiFilter() && criteria.getType() == SearchType.GENRE;
+        return !criteria.isMultiFilter() && criteria.getType() == SearchType.RATING;
     }
 }

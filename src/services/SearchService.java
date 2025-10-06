@@ -56,26 +56,7 @@ public class SearchService {
     }
 
     private List<Movie> searchPrimaryStore(SearchCriteria criteria) {
-        if(criteria.isMultiFilter()) {
-            return movieService.searchMultiFilter(
-                    criteria.getGenre(),
-                    criteria.getYear(),
-                    criteria.getMinRating()
-            );
-        }
-
-        switch (criteria.getType()) {
-            case GENRE:
-                return movieService.searchByGenre(GenreUtils.parseGenreType(criteria.getValue()));
-            case YEAR:
-                return movieService.searchByYear(Integer.parseInt(criteria.getValue()));
-            case RATING:
-                return movieService.searchByRating(Float.parseFloat(criteria.getValue()));
-            case TITLE:
-                return movieService.searchByTitle(criteria.getValue());
-            default:
-                return new ArrayList<>();
-        }
+        return movieService.search(criteria);
     }
 
     public void clearCache(String level) {
